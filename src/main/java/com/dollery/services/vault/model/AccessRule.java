@@ -4,12 +4,12 @@ public class AccessRule {
     private String role;
     private AccessMode access;
 
-    public AccessRule(String role, AccessMode access) {
+    AccessRule(String role, AccessMode access) {
         this.role = role;
         this.access = access;
     }
 
-    public String getRole() {
+    String getRole() {
         return role;
     }
 
@@ -17,7 +17,7 @@ public class AccessRule {
         return this.access == mode;
     }
 
-    public AccessMode getAccess() {
+    AccessMode getAccess() {
         return access;
     }
 }

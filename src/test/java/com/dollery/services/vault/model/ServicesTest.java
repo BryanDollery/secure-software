@@ -7,14 +7,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ServicesTest {
     @Test
-    public void singleService() {
+    void singleService() {
         Service a = new Service("A");
         assertNotNull(a);
 
     }
 
     @Test
-    public void clientToAService() {
+    void clientToAService() {
         Service orderReporter = new Service("orderReporter");
         Service orderDatabase = new Service("orderDB");
         orderReporter.uses(orderDatabase).as("reporter");
@@ -26,7 +26,7 @@ class ServicesTest {
     }
 
     @Test
-    public void generatePolicy() {
+    void generatePolicy() {
         Service a = new Service("a");
         Service b = new Service("b");
         a.uses(b).as("role");

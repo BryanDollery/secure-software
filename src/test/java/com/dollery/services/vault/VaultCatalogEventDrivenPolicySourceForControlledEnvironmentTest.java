@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class VaultCatalogEventDrivenPolicySourceForControlledEnvironmentTest {
     private EventBus bus = new EventBus();
     private Catalog catalog = new Catalog(bus);
-    private Vault vault = new Vault(bus);
+    private Vault vault = new Vault();
     private StandingCommittees standingCommittees = new StandingCommittees(bus);
     private ControlledEnvironment dev = new ControlledEnvironment(bus, "dev", "latest", standingCommittees);
 

@@ -6,7 +6,7 @@ public class Relationship {
     private Service server;
     private String role;
 
-    public Relationship(Service server) {
+    Relationship(Service server) {
         this.server = server;
     }
 
@@ -14,11 +14,11 @@ public class Relationship {
         return format("/%s/%s", server.getName(), role);
     }
 
-    public Service getServer() {
+    Service getServer() {
         return server;
     }
 
-    public String getRole() {
+    String getRole() {
         return role;
     }
 

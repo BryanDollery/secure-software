@@ -2,7 +2,7 @@ package com.dollery.services;
 
 import static com.dollery.services.Colors.SHADE;
 
-public class Output {
+public final class Output {
     public static final String QUOTE = SHADE.color("\"");
     public static final String COMMA = SHADE.color(",");
     public static final String OPEN_BRACE = SHADE.color("{");

@@ -38,12 +38,15 @@ public class Service {
         return relationship;
     }
 
-    public Set<Policy> getPolicies() {
+    Set<Policy> getPolicies() {
         Set<Policy> policies = new HashSet<>();
 
         for (Relationship rel : relatilonships) {
-            AccessRule ar = new AccessRule(rel.getRole(), AccessMode.r);
-            Policy policy = Policy.Factory.path(rel.getServer(), rel.getRole()).readRole(rel.getRole()).readWriteRole(rel.getServer().getName()).make();
+            Policy policy = Policy.Factory
+                    .path(rel.getServer(), rel.getRole())
+                    .owner(rel.getServer().getName())
+                    .consumer(rel.getRole())
+                    .make();
             policies.add(policy);
         }
 

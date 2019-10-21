@@ -19,14 +19,17 @@ public class Policy {
     private static final Logger log = LoggerFactory.getLogger(Policy.class);
 
     private static final String template = "  \"%s\" : \"%s\"";
+    public final UUID UUID = java.util.UUID.randomUUID();
 
-    private final String id = UUID.randomUUID().toString();
+    private final String id = UUID.toString();
+
     private String path;
     private Map<String, AccessRule> rules = new HashMap<>();
 
     public Policy(String path) {
         this.path = path;
         log.info("Policy created for {} ({})", DATA.color(path), SHADE.color(id));
+
     }
 
     public void addConsumer(String role) {
@@ -37,10 +40,6 @@ public class Policy {
     public void addOwner(String role) {
         this.rules.put(role, new AccessRule(role, AccessMode.rw));
         log.info("Owner added to policy role {} ({})", DATA.color(role), SHADE.color(id));
-    }
-
-    private void addWriteOnlyRole(String role) {
-        this.rules.put(role, new AccessRule(role, AccessMode.w));
     }
 
     public String getPath() {
@@ -65,7 +64,7 @@ public class Policy {
         //        private Set<String> writeOnlyRoles = new HashSet<>();
         private Set<String> readWriteRoles = new HashSet<>();
 
-        public Factory(String service) {
+        Factory(String service) {
             this.service = service;
         }
 
@@ -73,21 +72,16 @@ public class Policy {
             return new Factory(role);
         }
 
-        public static Factory path(Service service, String role) {
+        static Factory path(Service service, String role) {
             return new Factory("/" + service.getName() + "/" + role);
         }
 
-        public Factory readRole(String role) {
+        public Factory consumer(String role) {
             readOnlyRoles.add(role);
             return this;
         }
 
-//        public Factory writeRole(String role) {
-//            writeOnlyRoles.add(role);
-//            return this;
-//        }
-
-        public Factory readWriteRole(String role) {
+        public Factory owner(String role) {
             readWriteRoles.add(role);
             return this;
         }
@@ -97,7 +91,6 @@ public class Policy {
 
             readOnlyRoles.parallelStream().forEach(policy::addConsumer);
             readWriteRoles.parallelStream().forEach(policy::addOwner);
-//            writeOnlyRoles.parallelStream().forEach(policy::addWriteOnlyRole);
 
             return policy;
         }
