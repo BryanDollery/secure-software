@@ -1,0 +1,32 @@
+modelVersion: 4.0.0
+groupId: com.abnamro.nl
+artifactId: service-catalog
+version: 1.0.0
+packaging: jar
+properties: {java.version: 1.10, maven.compiler.target: 1.10, maven.compiler.source: 1.10}
+dependencies:
+  - {groupId: org.junit.jupiter, artifactId: junit-jupiter-api, version: 5.5.2, scope: test}
+  - {groupId: org.junit.jupiter, artifactId: junit-jupiter-engine, version: 5.5.2, scope: test}
+  - {groupId: org.apache.logging.log4j, artifactId: log4j-api, version: 2.12.1}
+  - {groupId: org.apache.logging.log4j, artifactId: log4j-core, version: 2.12.1}
+  - {groupId: org.apache.logging.log4j, artifactId: log4j-slf4j-impl, version: 2.12.1}
+  - {groupId: org.json, artifactId: json, version: 20190722}
+build:
+  plugins:
+    - groupId: org.apache.maven.plugins
+      artifactId: maven-surefire-plugin
+      version: 3.0.0-M3
+      configuration: {argLine: --illegal-access=permit}
+    - groupId: org.apache.maven.plugins
+      artifactId: maven-failsafe-plugin
+      version: 3.0.0-M3
+      configuration: {argLine: --illegal-access=permit}
+    - groupId: org.codehaus.mojo
+      artifactId: versions-maven-plugin
+      version: 2.7
+      configuration: {generateBackupPoms: false}
+    - groupId: org.apache.maven.plugins
+      artifactId: maven-compiler-plugin
+      version: 3.8.1
+      configuration: {release: 11}
+childInheritAppendPath: true
