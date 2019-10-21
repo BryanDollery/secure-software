@@ -68,6 +68,10 @@ public class Catalog {
         return this.relationships.size() > 0;
     }
 
+    public Set<Relationship> getRelationships() {
+        return relationships;
+    }
+
     public String getRelationshipsJson() {
         String relationships = this.relationships.parallelStream().sorted().map(Relationship::toString).collect(joining(","));
         return format("[%s]", relationships);

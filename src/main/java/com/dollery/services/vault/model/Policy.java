@@ -23,7 +23,7 @@ public class Policy {
         this.rules.put(role, new AccessRule(role, access));
     }
 
-    public void addClient(String role) {
+    public void addConsumer(String role) {
         this.rules.put(role, new AccessRule(role, AccessMode.r));
     }
 
@@ -87,7 +87,7 @@ public class Policy {
         public Policy make() {
             Policy policy = new Policy(service);
 
-            readOnlyRoles.parallelStream().forEach(policy::addClient);
+            readOnlyRoles.parallelStream().forEach(policy::addConsumer);
             writeOnlyRoles.parallelStream().forEach(policy::addWriteOnlyRole);
             readWriteRoles.parallelStream().forEach(policy::addOwner);
 

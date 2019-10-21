@@ -3,8 +3,11 @@ package com.dollery.services.vault;
 import com.dollery.services.bus.EventBus;
 import com.dollery.services.catalog.Catalog;
 import com.dollery.services.catalog.ControlledEnvironment;
+import com.dollery.services.catalog.Service;
 import com.dollery.services.catalog.StandingCommittees;
 import org.junit.jupiter.api.Test;
+
+import java.util.Collection;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -15,6 +18,11 @@ class VaultCatalogEventDrivenPolicySourceForControlledEnvironmentTest {
     private Vault vault = new Vault(bus);
     private StandingCommittees standingCommittees = new StandingCommittees(bus);
     private ControlledEnvironment dev = new ControlledEnvironment(bus, "dev", "latest", standingCommittees);
+
+    @Test
+    void mocks() {
+
+    }
 
     @Test
     void policiesAreWrittenBasedOnCatalogEvents() {
@@ -33,10 +41,11 @@ class VaultCatalogEventDrivenPolicySourceForControlledEnvironmentTest {
         // when
         catalog.addRelationship("a", "b");
 
-        // then
-        assertTrue(catalog.getServicesJson().contains("\"a\""), "Didn't find service A");
-        assertTrue(catalog.getServicesJson().contains("\"b\""), "Didn't find service B");
-        assertTrue(catalog.getServicesJson().contains("\"c\""), "Didn't find service C");
+        Collection<Service> services = catalog.getServices();
+
+        assertTrue(has(services, "a"), "Didn't find service A");
+        assertTrue(has(services, "b"), "Didn't find service B");
+        assertTrue(has(services, "c"), "Didn't find service C");
 
         assertEquals(1, vault.getPolicyCount(), "There should be a policy at this point");
         assertEquals(1, vault.getSecretCount(), "There should be a secret at this point");
@@ -46,5 +55,9 @@ class VaultCatalogEventDrivenPolicySourceForControlledEnvironmentTest {
         vault.store("b", "/dev/latest/secrets/b", "{username:\"wibble\",password:\"wobble\"}");
         secret = vault.fetch("a", "/dev/latest/secrets/b");
         assertEquals("{username:\"wibble\",password:\"wobble\"}", secret, "We should have credentials here");
+    }
+
+    private boolean has(Collection<Service> services, String name) {
+        return services.parallelStream().anyMatch(s -> s.getName().equals(name));
     }
 }
