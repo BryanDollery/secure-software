@@ -9,10 +9,14 @@ import java.time.Instant;
 import java.util.*;
 import java.util.function.Consumer;
 
+import static com.dollery.services.Colors.CYAN_BRIGHT;
 import static com.dollery.services.Colors.RESET;
 import static com.dollery.services.bus.EventBus.ReplayMode.AllTags;
 import static java.util.stream.Collectors.toList;
 
+/**
+ * A remarkably simple event bus
+ */
 public class EventBus {
     private static final Logger log = LoggerFactory.getLogger(EventBus.class);
 
@@ -31,7 +35,7 @@ public class EventBus {
         if (!subscribers.containsKey(tag)) subscribers.put(tag, new HashSet<>());
         Set<Subscriber> subs = this.subscribers.get(tag);
         subs.add(subscriber);
-        log.info("Subscribe: {}{}{}", Colors.CYAN_BRIGHT, tag, RESET);
+        log.info("Subscribe: {}{}{}", CYAN_BRIGHT, tag, RESET);
         return this;
     }
 

@@ -6,11 +6,12 @@ import org.slf4j.LoggerFactory;
 import java.util.HashSet;
 import java.util.Set;
 
-import static com.dollery.services.Colors.BLUE;
-import static com.dollery.services.Colors.GREEN;
+import static com.dollery.services.Colors.COMMITTEE;
+import static com.dollery.services.Colors.DATA;
+import static com.dollery.services.Colors.DATA2;
+import static com.dollery.services.Colors.MEMBER;
 import static com.dollery.services.Colors.RED;
-import static com.dollery.services.Colors.RESET;
-import static com.dollery.services.Colors.YELLOW;
+import static com.dollery.services.Colors.STATUS;
 import static com.dollery.services.catalog.Sem.patch;
 import static com.dollery.services.catalog.SittingCommittee.Status.approved;
 import static java.util.stream.Collectors.joining;
@@ -62,7 +63,7 @@ public class SittingCommittee extends Committee {
         Member member = members.get(approverName);
 
         if (member == null) {
-            log.info("Attempt to approve by non-approver: {}", approverName);
+            log.info("Attempt to approve by non-approver: {}", RED.color(approverName));
             throw new RuntimeException("'" + approverName + "' is not an approver for the '" + name + "' committee. Valid approvers are: " +
                     members.keySet().parallelStream().sorted().collect(joining(", ")));
         }
@@ -72,11 +73,12 @@ public class SittingCommittee extends Committee {
         if (approvals.size() >= quorum)
             status = approved;
 
-        log.info("env: " + BLUE + "{}" + RESET
-                        + " approved by " + YELLOW + "{}" + RESET
-                        + ". Approvals: " + GREEN + "{}/{}." + RESET
-                        + " Status: " + (status == approved ? GREEN : RED) + "{}"
-                , name, approverName, getApprovals(), getQuorum(), status);
+        log.info("env: {} approved by {}. Approvals: {}/{}. Status {}"
+                , COMMITTEE.color(name)
+                , MEMBER.color(approverName)
+                , DATA2.color(getApprovals())
+                , DATA.color(getQuorum())
+                , STATUS.color(status.toString(), status == approved));
     }
 
     public Status getStatus() {

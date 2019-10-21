@@ -3,13 +3,11 @@ package com.dollery.services.catalog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static com.dollery.services.Colors.BLUE;
 import static com.dollery.services.Colors.COMMITTEE;
+import static com.dollery.services.Colors.DATA;
 import static com.dollery.services.Colors.GREEN;
 import static com.dollery.services.Colors.MEMBER;
-import static com.dollery.services.Colors.READY;
-import static com.dollery.services.Colors.RESET;
-import static com.dollery.services.Colors.UNREADY;
+import static com.dollery.services.Colors.STATUS;
 import static com.dollery.services.catalog.Sem.patch;
 import static com.dollery.services.catalog.StandingCommittee.Status.standing;
 import static com.dollery.services.catalog.StandingCommittee.Status.unready;
@@ -51,12 +49,13 @@ public class StandingCommittee extends Committee {
 
         status = members.size() < quorum + 2 ? unready : standing;
 
-        log.info("Committee: " + COMMITTEE + "{}" + RESET
-                        + ". New Member: " + MEMBER + "{}" + RESET
-                        + ". Member count: " + BLUE + "{}" + RESET
-                        + ". Quorum: " + GREEN + "{}" + RESET
-                        + ". Status: " + (status == unready ? UNREADY : READY) + "{}" + RESET
-                , name, memberName, members.size(), quorum, status.toString());
+        log.info("Committee: {}. New member: {}. Member count: {}. Quorum: {}. Status: {}",
+                COMMITTEE.color(name),
+                MEMBER.color(memberName),
+                DATA.color(members.size()),
+                GREEN.color(quorum),
+                STATUS.color(status.toString()), status == unready);
+
         return this;
     }
 

@@ -12,7 +12,7 @@ class VaultTest {
     public void basics() {
         EventBus bus = new EventBus();
         Vault vault = new Vault(bus);
-        Policy policy = Policy.Factory.path("/orderDB/orderReporter").readRole("orderReporter").writeRole("owner").make();
+        Policy policy = Policy.Factory.path("/orderDB/orderReporter").readRole("orderReporter").readWriteRole("owner").make();
         vault.addPolicy(policy);
         Service a = new Service("orderReporterService");
         Service b = new Service("orderDB");

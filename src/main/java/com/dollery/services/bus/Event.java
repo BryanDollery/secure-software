@@ -5,17 +5,22 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Set;
 
-import static com.dollery.services.Colors.BLACK_BRIGHT;
 import static com.dollery.services.Colors.GREEN;
 import static com.dollery.services.Colors.RED;
-import static com.dollery.services.Colors.RESET;
+import static com.dollery.services.Colors.SHADE;
+import static com.dollery.services.Output.CLOSE_BRACE;
+import static com.dollery.services.Output.COMMA;
+import static com.dollery.services.Output.OPEN_BRACE;
+import static com.dollery.services.Output.pair;
 import static java.lang.String.format;
 import static java.util.Arrays.stream;
 import static java.util.Set.copyOf;
 import static java.util.stream.Collectors.toSet;
 
 public class Event implements Comparable<Event> {
+    @SuppressWarnings("WeakerAccess")
     public static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("HH:mm:ss:SSS").withZone(ZoneId.systemDefault());
+
     private String body;
     private Instant timestamp;
     private Set<String> tags;
@@ -50,23 +55,18 @@ public class Event implements Comparable<Event> {
 
     @Override
     public String toString() {
-        String symbol = BLACK_BRIGHT.toString();
-        String label = BLACK_BRIGHT.toString();
-        String bodyC = RED.toString();
-        String tagC = GREEN.toString();
-        String timestampC = BLACK_BRIGHT.toString();
-
-
-        String formattedTime = FORMATTER.format(timestamp);
-
-        return format(symbol + "{"
-                + "\"" + label + "body" + symbol + "\":\"" + bodyC + "%s" + symbol + "\","
-                + "\"" + label + "tags" + symbol + "\":\"" + tagC + "%s" + symbol + "\","
-                + "\"" + label + "timestamp" + symbol + "\":\"" + timestampC + "%s" + symbol + "\""
-                + "}" + RESET, body, tags, formattedTime);
+        return OPEN_BRACE
+                + pair("body", body, RED) + COMMA
+                + pair("tags", tags.toString(), GREEN) + COMMA
+                + pair("timestamp", formats(timestamp), SHADE)
+                + CLOSE_BRACE;
     }
 
     public String toStringClear() {
         return format("{\"body\":\"%s\",\"timestamp\":\"%s\",\"tags\":\"%s\"}", body, timestamp, tags);
+    }
+
+    private String formats(Instant timestamp) {
+        return FORMATTER.format(timestamp);
     }
 }

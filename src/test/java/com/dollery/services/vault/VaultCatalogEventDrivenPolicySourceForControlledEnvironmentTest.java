@@ -20,11 +20,6 @@ class VaultCatalogEventDrivenPolicySourceForControlledEnvironmentTest {
     private ControlledEnvironment dev = new ControlledEnvironment(bus, "dev", "latest", standingCommittees);
 
     @Test
-    void mocks() {
-
-    }
-
-    @Test
     void policiesAreWrittenBasedOnCatalogEvents() {
 
         // A policy generator for Vault that responds to catalog events for a given environment
@@ -41,11 +36,9 @@ class VaultCatalogEventDrivenPolicySourceForControlledEnvironmentTest {
         // when
         catalog.addRelationship("a", "b");
 
-        Collection<Service> services = catalog.getServices();
-
-        assertTrue(has(services, "a"), "Didn't find service A");
-        assertTrue(has(services, "b"), "Didn't find service B");
-        assertTrue(has(services, "c"), "Didn't find service C");
+        assertTrue(has(catalog.getServices(), "a"), "Didn't find service A");
+        assertTrue(has(catalog.getServices(), "b"), "Didn't find service B");
+        assertTrue(has(catalog.getServices(), "c"), "Didn't find service C");
 
         assertEquals(1, vault.getPolicyCount(), "There should be a policy at this point");
         assertEquals(1, vault.getSecretCount(), "There should be a secret at this point");

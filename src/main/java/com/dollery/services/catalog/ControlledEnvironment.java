@@ -1,6 +1,5 @@
 package com.dollery.services.catalog;
 
-import com.dollery.services.Colors;
 import com.dollery.services.bus.EventBus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.dollery.services.Colors.RESET;
+import static com.dollery.services.Colors.RED;
 import static java.util.UUID.randomUUID;
 
 /**
@@ -95,7 +94,7 @@ public class ControlledEnvironment {
         SittingCommittee committee = committees.get(committeeName);
 
         if (committee == null) {
-            log.debug(Colors.RED + "{}" + RESET + " is not a committee associated with this environment", committeeName);
+            log.debug("{} is not a committee associated with this environment", RED.color(committeeName));
             throw new RuntimeException(committeeName + " is not a committee associated with this environment");
         }
 

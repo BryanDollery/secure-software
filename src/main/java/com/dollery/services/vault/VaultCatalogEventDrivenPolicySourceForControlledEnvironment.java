@@ -13,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import java.util.Set;
 
 import static com.dollery.services.Colors.BLUE;
-import static com.dollery.services.Colors.RESET;
 
 /**
  * A policy generator for Vault that responds to catalog events for a given environment
@@ -45,7 +44,7 @@ public class VaultCatalogEventDrivenPolicySourceForControlledEnvironment impleme
     @Override
     public void handle(Event event) {
         // The catalog has changed
-        log.debug("The {}{}{} catalog has changed", BLUE, env.getName(), RESET);
+        log.debug("The {} catalog has changed", BLUE.color(env.getName()));
         vault.clearPolicies();
 
         if (!catalog.hasRelationships()) return;

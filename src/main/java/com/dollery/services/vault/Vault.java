@@ -7,8 +7,10 @@ import com.dollery.services.vault.model.AccessMode;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class Vault {
+    private final String id = UUID.randomUUID().toString();
     private Map<String, Policy> policies = new HashMap<>();
     private Map<String, String> secrets = new HashMap<>();
     private EventBus bus;

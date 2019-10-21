@@ -6,14 +6,9 @@ public enum Colors {
     // Regular Colors
     BLACK("\033[0;30m"),    // BLACK
     RED("\033[0;31m"),      // RED
-    UNREADY("\033[0;31m"),      // RED
     GREEN("\033[0;32m"),    // GREEN
-    APPROVED("\033[0;32m"),    // GREEN
-    READY("\033[0;32m"),    // GREEN
     YELLOW("\033[0;33m"),   // YELLOW
-    MEMBER("\033[0;33m"),   // YELLOW
     BLUE("\033[0;34m"),     // BLUE
-    COMMITTEE("\033[0;34m"),     // BLUE
     MAGENTA("\033[0;35m"),  // MAGENTA
     CYAN("\033[0;36m"),     // CYAN
     WHITE("\033[0;37m"),    // WHITE
@@ -76,7 +71,19 @@ public enum Colors {
     BLUE_BACKGROUND_BRIGHT("\033[0;104m"),      // BLUE
     MAGENTA_BACKGROUND_BRIGHT("\033[0;105m"),   // MAGENTA
     CYAN_BACKGROUND_BRIGHT("\033[0;106m"),      // CYAN
-    WHITE_BACKGROUND_BRIGHT("\033[0;107m");     // WHITE
+    WHITE_BACKGROUND_BRIGHT("\033[0;107m"),     // WHITE
+
+    // Model specific
+    COMMITTEE(CYAN.code),
+    UNREADY(RED.code),
+    APPROVED(GREEN.code),
+    READY(GREEN.code),
+    MEMBER(BLUE.code),
+    DATA(BLUE.code),
+    DATA2(BLUE_BOLD_BRIGHT.code),
+    SHADE(BLACK_BRIGHT.code),
+    STATUS("")
+    ;
 
     private final String code;
 
@@ -84,8 +91,59 @@ public enum Colors {
         this.code = code;
     }
 
+    public String getCode() {
+        return code;
+    }
+
+    public static String blue(String s) {
+        return BLUE + s + RESET;
+    }
+
+    public static String committee(String s) {
+        return blue(s);
+    }
+
+    public static String red(String s) {
+        return RED + s + RESET;
+    }
+
+    public static String unready(String s) {
+        return red(s);
+    }
+
+    public static String error(String s) {
+        return red(s);
+    }
+
     @Override
     public String toString() {
         return code;
     }
+
+    public String color(String s) {
+        return code + s + RESET;
+    }
+
+    public String color(String s, boolean status) {
+        return status ? RED.color(s) : GREEN.color(s);
+    }
+
+    public String color(int i) {
+        return color("" + i);
+    }
+
+    public static final String QUOTE = "\"";
+    public static final String SHADED_QUOTE = SHADE.color(QUOTE);
+    public static final String COMMA = SHADE.color(",");
+
+    public String pair(String label, String value, Colors valueColor) {
+        String left = quote(label, SHADE);
+        String right = quote(value, valueColor);
+        return left + SHADE.color(":") + right;
+    }
+
+    public String quote(String s, Colors c) {
+        return SHADED_QUOTE + c.color(s) + SHADED_QUOTE;
+    }
+
 }

@@ -1,37 +1,45 @@
 package com.dollery.services.vault.model;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
+import static com.dollery.services.Colors.DATA;
+import static com.dollery.services.Colors.SHADE;
 import static java.lang.String.format;
 import static java.util.stream.Collectors.joining;
 
 public class Policy {
+    private static final Logger log = LoggerFactory.getLogger(Policy.class);
+
     private static final String template = "  \"%s\" : \"%s\"";
 
+    private final String id = UUID.randomUUID().toString();
     private String path;
     private Map<String, AccessRule> rules = new HashMap<>();
 
     public Policy(String path) {
         this.path = path;
-    }
-
-    public void addRule(String role, AccessMode access) {
-        this.rules.put(role, new AccessRule(role, access));
+        log.info("Policy created for {} ({})", DATA.color(path), SHADE.color(id));
     }
 
     public void addConsumer(String role) {
         this.rules.put(role, new AccessRule(role, AccessMode.r));
+        log.info("Consumer added to policy role {} ({})", DATA.color(role), SHADE.color(id));
     }
 
     public void addOwner(String role) {
         this.rules.put(role, new AccessRule(role, AccessMode.rw));
+        log.info("Owner added to policy role {} ({})", DATA.color(role), SHADE.color(id));
     }
 
-    public void addWriteOnlyRole(String role) {
+    private void addWriteOnlyRole(String role) {
         this.rules.put(role, new AccessRule(role, AccessMode.w));
     }
 
@@ -54,7 +62,7 @@ public class Policy {
     public static class Factory {
         private String service;
         private Set<String> readOnlyRoles = new HashSet<>();
-        private Set<String> writeOnlyRoles = new HashSet<>();
+        //        private Set<String> writeOnlyRoles = new HashSet<>();
         private Set<String> readWriteRoles = new HashSet<>();
 
         public Factory(String service) {
@@ -74,10 +82,10 @@ public class Policy {
             return this;
         }
 
-        public Factory writeRole(String role) {
-            writeOnlyRoles.add(role);
-            return this;
-        }
+//        public Factory writeRole(String role) {
+//            writeOnlyRoles.add(role);
+//            return this;
+//        }
 
         public Factory readWriteRole(String role) {
             readWriteRoles.add(role);
@@ -88,8 +96,8 @@ public class Policy {
             Policy policy = new Policy(service);
 
             readOnlyRoles.parallelStream().forEach(policy::addConsumer);
-            writeOnlyRoles.parallelStream().forEach(policy::addWriteOnlyRole);
             readWriteRoles.parallelStream().forEach(policy::addOwner);
+//            writeOnlyRoles.parallelStream().forEach(policy::addWriteOnlyRole);
 
             return policy;
         }
