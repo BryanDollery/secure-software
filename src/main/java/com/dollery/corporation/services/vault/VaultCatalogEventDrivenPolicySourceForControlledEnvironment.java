@@ -3,10 +3,10 @@ package com.dollery.corporation.services.vault;
 import com.dollery.corporation.services.bus.Event;
 import com.dollery.corporation.services.bus.EventBus;
 import com.dollery.corporation.services.bus.Subscriber;
+import com.dollery.corporation.services.catalog.Catalog;
 import com.dollery.corporation.services.catalog.ControlledEnvironment;
 import com.dollery.corporation.services.catalog.Relationship;
 import com.dollery.corporation.services.vault.model.Policy;
-import com.dollery.corporation.services.catalog.Catalog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

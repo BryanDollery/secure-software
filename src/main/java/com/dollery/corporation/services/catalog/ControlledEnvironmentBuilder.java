@@ -32,17 +32,16 @@ public class ControlledEnvironmentBuilder {
     }
 
     /**
-     *
      * For an environment to be complete, it must include every downstream service that is needed to provide it's own
      * service. These downstream services may not be deployed within a physical environment, they may instead be services
      * run by third-parties, but our model is interested in secure communication, not physical deployment models. Our
      * 'test' (controlled) environment is a map of service connections needed to fulfil this service in that context.
      * Though, it is possible to go much further with this model in a 100% k8s environment, where you can actually
      * deploy an entire controlled-environment in a single physical (ish*) environment. *namespace maybe.
-     *
+     * <p>
      * We are interested in downstream dependencies, so we just keep iterating down the tree until we have them all.
      * Circular dependencies are ok because we store services in Sets so any duplicate will be discarded.
-     *
+     * <p>
      * This is a really inefficient algorithm that in a production system would be outrageous
      * but in this simulation it's fine. This algorithm has a collection of services,
      * and it follows the relationships to downstream services and adds them to the environment.
@@ -54,7 +53,6 @@ public class ControlledEnvironmentBuilder {
      * services, the cost of dealing with a new dependency would require thousands of comparisons instead
      * of one. But, this is also fine, because this is a simulation and the aim here is to look at the
      * processes and flows, not the elegance and efficiency of the java code.
-     *
      */
     private void addDependencyTree() {
         AddingDependencies ad = incomplete;

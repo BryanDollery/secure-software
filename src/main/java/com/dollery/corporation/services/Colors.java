@@ -82,17 +82,15 @@ public enum Colors {
     DATA(BLUE.code),
     DATA2(BLUE_BOLD_BRIGHT.code),
     SHADE(BLACK_BRIGHT.code),
-    STATUS("")
-    ;
+    STATUS("");
 
+    public static final String QUOTE = "\"";
+    public static final String SHADED_QUOTE = SHADE.color(QUOTE);
+    public static final String COMMA = SHADE.color(",");
     private final String code;
 
     Colors(String code) {
         this.code = code;
-    }
-
-    public String getCode() {
-        return code;
     }
 
     public static String blue(String s) {
@@ -115,6 +113,10 @@ public enum Colors {
         return red(s);
     }
 
+    public String getCode() {
+        return code;
+    }
+
     @Override
     public String toString() {
         return code;
@@ -131,10 +133,6 @@ public enum Colors {
     public String color(int i) {
         return color("" + i);
     }
-
-    public static final String QUOTE = "\"";
-    public static final String SHADED_QUOTE = SHADE.color(QUOTE);
-    public static final String COMMA = SHADE.color(",");
 
     public String pair(String label, String value, Colors valueColor) {
         String left = quote(label, SHADE);

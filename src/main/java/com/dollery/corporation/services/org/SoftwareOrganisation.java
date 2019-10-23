@@ -1,6 +1,8 @@
 package com.dollery.corporation.services.org;
 
 import com.dollery.corporation.services.catalog.ControlledEnvironment;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A "software organisation" is a bounded context (ddd) that contains three software contexts:
@@ -24,9 +26,11 @@ import com.dollery.corporation.services.catalog.ControlledEnvironment;
  * software and every environment that isn't being used for production or testing purposes.
  * <p>
  * To implement this model, I have created this class, Software Organisation. It holds a single ControlledEnvironment
- * called "context". I have created three children of this org, dev, test, and prod
+ * called "context". I have created three children of this org, dev, test, and prod, each of which is the name of a
+ * sub-organisation.
  */
 public class SoftwareOrganisation extends PerOrg {
+    private static final Logger log = LoggerFactory.getLogger(SoftwareOrganisation.class);
     private ControlledEnvironment context;
 
     public SoftwareOrganisation(String name) {
@@ -36,10 +40,6 @@ public class SoftwareOrganisation extends PerOrg {
         this.add("test");
         this.add("prod");
     }
-
-
-
-
 
     @Override
     public PerOrg add(String name) {

@@ -1,10 +1,10 @@
 package com.dollery.corporation.services.vault;
 
 import com.dollery.corporation.services.bus.EventBus;
+import com.dollery.corporation.services.catalog.Catalog;
 import com.dollery.corporation.services.catalog.ControlledEnvironment;
 import com.dollery.corporation.services.catalog.Service;
 import com.dollery.corporation.services.catalog.StandingCommittees;
-import com.dollery.corporation.services.catalog.Catalog;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
