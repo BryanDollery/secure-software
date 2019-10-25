@@ -1,7 +1,5 @@
 package com.dollery.corporation.services.catalog;
 
-import com.dollery.corporation.services.bus.EventBus;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,11 +11,6 @@ import java.util.Map;
  */
 public class StandingCommittees {
     private final Map<String, StandingCommittee> committees = new HashMap<>();
-    private EventBus bus;
-
-    public StandingCommittees(EventBus bus) {
-        this.bus = bus;
-    }
 
     public StandingCommittees add(StandingCommittee committee) {
         committees.put(committee.getName(), committee);

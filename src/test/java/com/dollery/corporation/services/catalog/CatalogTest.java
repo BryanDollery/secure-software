@@ -5,10 +5,11 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class CatalogTest {
+class CatalogTest {
+    private EventBus bus = new EventBus();
+
     @Test
-    public void services() {
-        EventBus bus = new EventBus();
+    void services() {
         Catalog c = new Catalog(bus);
         c.addService("a");
         c.addService("b");
@@ -18,8 +19,7 @@ public class CatalogTest {
     }
 
     @Test
-    public void relationship() {
-        EventBus bus = new EventBus();
+    void relationship() {
         Catalog c = new Catalog(bus);
         c.addService("a");
         c.addService("b");

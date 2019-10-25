@@ -4,7 +4,7 @@ import com.dollery.corporation.services.bus.EventBus;
 import com.dollery.corporation.services.catalog.Catalog;
 import com.dollery.corporation.services.catalog.ControlledEnvironment;
 import com.dollery.corporation.services.catalog.Service;
-import com.dollery.corporation.services.catalog.StandingCommittees;
+import com.dollery.corporation.services.org.SoftwareOrganisation;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
@@ -14,18 +14,18 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class VaultCatalogEventDrivenPolicySourceForControlledEnvironmentTest {
     private EventBus bus = new EventBus();
-    private Catalog catalog = new Catalog(bus);
+    private SoftwareOrganisation devO = new SoftwareOrganisation("dev", bus);
+    private ControlledEnvironment dev = new ControlledEnvironment("dev", "latest", devO);
+    private Catalog catalog = new Catalog(devO.getBus());
     private Vault vault = new Vault();
-    private StandingCommittees standingCommittees = new StandingCommittees(bus);
-    private ControlledEnvironment dev = new ControlledEnvironment(bus, "dev", "latest", standingCommittees);
 
     @Test
     void policiesAreWrittenBasedOnCatalogEvents() {
 
         // A policy generator for Vault that responds to catalog events for a given environment
-        new VaultCatalogEventDrivenPolicySourceForControlledEnvironment(bus, vault, catalog, dev);
+        new VaultCatalogEventDrivenPolicySourceForControlledEnvironment(devO.getBus(), vault, catalog, dev);
 
-        // given
+        //
         assertEquals(0, vault.getPolicyCount(), "There should be no policies at this point");
         assertEquals(0, vault.getSecretCount(), "There should be no secrets at this point");
 

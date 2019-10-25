@@ -9,41 +9,39 @@ import java.util.UUID;
 
 import static java.util.stream.Collectors.joining;
 
-public class PerOrg {
+public abstract class PerOrg<T extends PerOrg> {
     private final String id = UUID.randomUUID().toString();
     private final String name;
     public Set<Agent> agents = new HashSet<>();
     public Products products;
     public Services services;
-    private PerOrg parent;
-    private Set<PerOrg> children = new HashSet<>();
+    private PerOrg<T> parent;
+    private Set<PerOrg<T>> children = new HashSet<>();
 
-    public PerOrg(String name) {
+    PerOrg(String name) {
         this.name = name;
     }
 
-    private PerOrg(String name, PerOrg parent) {
+    private PerOrg(String name, PerOrg<T> parent) {
         this(name);
         this.parent = parent;
     }
 
-    public PerOrg add(String name) {
-        children.add(new PerOrg(name, this));
+    public abstract T add(String name);
+
+    PerOrg<T> setParent(PerOrg<T> parent) {
+        this.parent = parent;
         return this;
     }
 
-    protected PerOrg add(PerOrg child) {
-        child.parent = this;
+    protected PerOrg<T> add(PerOrg<T> child) {
+        child.setParent(this);
         children.add(child);
         return this;
     }
 
-    public boolean isName(String name) {
-        return this.name.equals(name);
-    }
-
     public PerOrg get(String name) {
-        Optional<PerOrg> first = children.parallelStream().filter(p -> p.name.equals(name)).findFirst();
+        Optional<PerOrg<T>> first = children.parallelStream().filter(p -> p.name.equals(name)).findFirst();
         if (!first.isPresent()) throw new RuntimeException("Could not find " + name);
         return first.get();
     }

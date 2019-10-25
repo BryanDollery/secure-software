@@ -1,6 +1,6 @@
 package com.dollery.corporation.services.catalog;
 
-import com.dollery.corporation.services.bus.EventBus;
+import com.dollery.corporation.services.org.SoftwareOrganisation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,34 +27,55 @@ import static java.util.UUID.randomUUID;
 public class ControlledEnvironment {
     private static final Logger log = LoggerFactory.getLogger(ControlledEnvironment.class);
 
-    private String id;
-    private EventBus bus;
+    private String id = randomUUID().toString();
     private String name;
     private String tag;
-    private StandingCommittees standingCommittees;
-    private Map<String, SittingCommittee> committees = new HashMap<>();
+    private Map<String, SittingCommittee> sittingCommittees = new HashMap<>();
     private Map<String, Service> services = new HashMap<>();
     private Map<String, List<Relationship>> relationships = new HashMap<>();
     private SemVer version;
+    private SoftwareOrganisation owner;
 
-    public ControlledEnvironment(EventBus bus, String name, String tag, StandingCommittees standingCommittees) {
-        this(bus, name, tag, standingCommittees, new SemVer());
+    /**
+     * Automatically applies the tag 'latest' to this env
+     *
+     * @param name
+     * @param owner
+     */
+    public ControlledEnvironment(String name, SoftwareOrganisation owner) {
+        this(name, "latest", owner);
     }
 
-    private ControlledEnvironment(EventBus bus, String name, String tag, StandingCommittees standingCommittees, SemVer version) {
-        id = randomUUID().toString();
+    /**
+     * Automatically applies a new version number of 0.0.0
+     *
+     * @param name
+     * @param tag
+     * @param owner
+     */
+    public ControlledEnvironment(String name, String tag, SoftwareOrganisation owner) {
+        this(name, tag, owner, new SemVer());
+    }
 
-        this.bus = bus;
+    /**
+     * Only the id is automatically generated at this level
+     *
+     * @param name
+     * @param tag
+     * @param owner
+     * @param version
+     */
+    public ControlledEnvironment(String name, String tag, SoftwareOrganisation owner, SemVer version) {
         this.name = name;
         this.tag = tag;
-        this.standingCommittees = standingCommittees;
+        this.owner = owner;
         this.version = version;
     }
 
-    public Committee addCommittee(String name) {
-        SittingCommittee committee = standingCommittees.get(name).sit();
-        committees.put(name, committee);
-        return committee;
+    public Committee sit(String name) {
+        SittingCommittee sittingCommittee = owner.sit(name);
+        sittingCommittees.put(name, sittingCommittee);
+        return sittingCommittee;
     }
 
     public String getName() {
@@ -66,7 +87,7 @@ public class ControlledEnvironment {
     }
 
     public int getQuorum(String committeeName) {
-        return committees.get(committeeName).getQuorum();
+        return sittingCommittees.get(committeeName).getQuorum();
     }
 
     public ControlledEnvironment addService(String name) {
@@ -91,7 +112,7 @@ public class ControlledEnvironment {
     }
 
     private SittingCommittee findCommittee(String committeeName) {
-        SittingCommittee committee = committees.get(committeeName);
+        SittingCommittee committee = sittingCommittees.get(committeeName);
 
         if (committee == null) {
             log.debug("{} is not a committee associated with this environment", RED.color(committeeName));
@@ -110,7 +131,7 @@ public class ControlledEnvironment {
     }
 
     public boolean isApproved() {
-        return !committees.values().parallelStream().anyMatch(c -> c.getStatus() != SittingCommittee.Status.approved);
+        return !sittingCommittees.values().parallelStream().anyMatch(c -> c.getStatus() != SittingCommittee.Status.approved);
     }
 
     public String getTag() {
@@ -126,14 +147,15 @@ public class ControlledEnvironment {
     }
 
     public ControlledEnvironment patch() {
-        return new ControlledEnvironment(bus, name, tag, standingCommittees, version.patch());
+        return new ControlledEnvironment(name, tag, owner, version.patch());
     }
 
     public ControlledEnvironment minor() {
-        return new ControlledEnvironment(bus, name, tag, standingCommittees, version.minor());
+        return new ControlledEnvironment(name, tag, owner, version.minor());
     }
 
     public ControlledEnvironment major() {
-        return new ControlledEnvironment(bus, name, tag, standingCommittees, version.major());
+        return new ControlledEnvironment(name, tag, owner, version.major());
     }
+
 }

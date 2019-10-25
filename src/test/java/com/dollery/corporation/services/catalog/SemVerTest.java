@@ -8,7 +8,7 @@ class SemVerTest {
     @Test
     void thing() {
         SemVer a = new SemVer();
-        ControlledEnvironment env = new ControlledEnvironment(null, null, null, null);
+        ControlledEnvironment env = new ControlledEnvironment("", "", null);
         assertEquals(0, env.getVersion().getMajor());
         assertEquals(0, env.getVersion().getMinor());
         assertEquals(0, env.getVersion().getPatch());

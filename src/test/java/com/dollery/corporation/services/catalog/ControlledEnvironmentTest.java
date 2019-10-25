@@ -15,8 +15,8 @@ class ControlledEnvironmentTest {
     void committeesHaveQuorums() {
         TestData data = new TestData();
 
-        assertEquals(3, data.env.getQuorum(TestData.ARB));
-        assertEquals(1, data.env.getQuorum(TestData.DEV_TEAM));
+        assertEquals(3, data.env().getQuorum(TestData.ARB));
+        assertEquals(1, data.env().getQuorum(TestData.DEV_TEAM));
     }
 
     // This test proves that the 'givenApprovedRelationships" method in the TestData works. It's basically the same code
@@ -25,19 +25,19 @@ class ControlledEnvironmentTest {
     void simpleApprovalsWork() {
         TestData data = new TestData();
 
-        data.env.addService("a").addService("b").addRelationship("a", "b");
-        assertFalse(data.env.isApproved(), "There should have been no approvals yet");
+        data.env().addService("a").addService("b").addRelationship("a", "b");
+        assertFalse(data.env().isApproved(), "There should have been no approvals yet");
 
         // arb
-        data.env.approve(TestData.ARB, "Alice").approve(TestData.ARB, "Bob").approve(TestData.ARB, "Dave");
-        assertEquals(3, data.env.getApprovals(TestData.ARB), "arb should have had 3 approvals now");
-        assertTrue(data.env.isApproved(TestData.ARB));
-        assertFalse(data.env.isApproved(), "We have ARB approvals, but the dev-team are now the blocker");
+        data.env().approve(TestData.ARB, "Alice").approve(TestData.ARB, "Bob").approve(TestData.ARB, "Dave");
+        assertEquals(3, data.env().getApprovals(TestData.ARB), "arb should have had 3 approvals now");
+        assertTrue(data.env().isApproved(TestData.ARB));
+        assertFalse(data.env().isApproved(), "We have ARB approvals, but the dev-team are now the blocker");
 
         // dev-team
-        data.env.approve(TestData.DEV_TEAM, "Zebedee");
-        assertTrue(data.env.isApproved(TestData.DEV_TEAM));
-        assertTrue(data.env.isApproved());
+        data.env().approve(TestData.DEV_TEAM, "Zebedee");
+        assertTrue(data.env().isApproved(TestData.DEV_TEAM));
+        assertTrue(data.env().isApproved());
     }
 
     @Test

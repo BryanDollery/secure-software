@@ -75,6 +75,6 @@ public class EventBus {
     }
 
     enum ReplayMode {
-        OnlyThisTag, AllTags;
+        OnlyThisTag, AllTags
     }
 }

@@ -10,10 +10,11 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class EventBusTest {
+    private EventBus bus = new EventBus();
+
     @Test
-    public void notifyByTag() {
+    void notifyByTag() {
         // given
-        EventBus bus = new EventBus();
 
         AtomicBoolean triggered = new AtomicBoolean(false);
         AtomicBoolean error = new AtomicBoolean(false);
@@ -30,9 +31,8 @@ class EventBusTest {
     }
 
     @Test
-    public void multipleSubscribersToASingleTagWithReplay() {
+    void multipleSubscribersToASingleTagWithReplay() {
         // given
-        EventBus bus = new EventBus();
 
         AtomicBoolean error = new AtomicBoolean(false);
         AtomicInteger counter = new AtomicInteger(0);

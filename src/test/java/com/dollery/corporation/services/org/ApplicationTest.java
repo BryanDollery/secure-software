@@ -22,9 +22,9 @@ class ApplicationTest {
         TestData testEnv = new TestData();
         TestData prodEnv = new TestData();
 
-        app.addEnvironmentToPhase(Application.Lifecycle.Phase.dev, devEnv.env);
-        app.addEnvironmentToPhase(Application.Lifecycle.Phase.test, testEnv.env);
-        app.addEnvironmentToPhase(Application.Lifecycle.Phase.prod, prodEnv.env);
+        app.addEnvironmentToPhase(Application.Lifecycle.Phase.dev, devEnv.env());
+        app.addEnvironmentToPhase(Application.Lifecycle.Phase.test, testEnv.env());
+        app.addEnvironmentToPhase(Application.Lifecycle.Phase.prod, prodEnv.env());
 
         Assertions.assertEquals(Application.Lifecycle.Phase.dev, app.getPhase());
         Assertions.assertEquals(Application.Lifecycle.State.pre, app.getState());

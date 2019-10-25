@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class PerOrgTest {
     @Test
     void thing() {
-        PerOrg aab = new PerOrg("Acme Agricultural Bank");
+        TestOrg aab = new TestOrg("Acme Agricultural Bank");
         aab.add("a").add("b").add("c");
         PerOrg b = aab.get("b");
         b.add("ba").add("bb").add("bc");
@@ -17,5 +17,17 @@ class PerOrgTest {
         System.out.println(shadeSymbols(aab.toString()));
         PerOrg aaa = ba.get("bab");
         assertNotNull(aaa);
+    }
+
+    private static class TestOrg extends PerOrg<TestOrg> {
+        TestOrg(String name) {
+            super(name);
+        }
+
+        @Override
+        public TestOrg add(String name) {
+            super.add(new TestOrg(name));
+            return this;
+        }
     }
 }

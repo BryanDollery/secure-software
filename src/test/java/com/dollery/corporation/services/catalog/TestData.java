@@ -1,6 +1,7 @@
 package com.dollery.corporation.services.catalog;
 
-import com.dollery.corporation.services.bus.EventBus;
+import com.dollery.corporation.services.org.Enterprise;
+import com.dollery.corporation.services.org.SoftwareOrganisation;
 
 /**
  * Creates a vault, standing committees for arb and dev-team, with 3 and 1 quorums respectively, and
@@ -10,31 +11,32 @@ public class TestData {
     public static final String DEV = "dev";
     public static final String ARB = "arb";
     public static final String DEV_TEAM = "dev-team";
-    public final StandingCommittee arb = new StandingCommittee(ARB);
-    public final StandingCommittee devTeam = new StandingCommittee(DEV_TEAM, 1);
-    public final EventBus bus = new EventBus();
-    public final StandingCommittees standingCommittees = new StandingCommittees(bus);
-    public final ControlledEnvironment env = new ControlledEnvironment(bus, DEV, "latest", standingCommittees);
+    private Enterprise enterprise = new Enterprise("Acme Inc.");
+
+    private final SoftwareOrganisation owner = enterprise.add(DEV_TEAM);
 
     public TestData() {
+        StandingCommittee arb = owner.formCommittee(ARB);
+        StandingCommittee devTeam = owner.formCommittee(DEV_TEAM, 1);
+
         // Add members to committees and reset quorum
         arb.addMember("Alice").addMember("Bob").addMember("Charlie").addMember("Dave").addMember("Enid");
         devTeam.addMember("Xavier").addMember("Yoris").addMember("Zebedee");
 
-        // Committees are standing
-        standingCommittees.add(arb);
-        standingCommittees.add(devTeam);
-
-        // Add them as sitting approvers for the environment
-        env.addCommittee(ARB);
-        env.addCommittee(DEV_TEAM);
+        // Add them as sitting approvers for the dev environment
+        owner.sit("dev", ARB);
+        owner.sit("dev", DEV_TEAM);
 
         // The dev environment now requires 3 arb approvals and 1 dev-team approval, at which point it will be marked as approved (and therefore can be deployed)
     }
 
     public void givenAnApprovedRelationship() {
-        this.env.addService("a").addService("b").addRelationship("a", "b");
-        this.env.approve(ARB, "Alice").approve(ARB, "Bob").approve(ARB, "Dave");
-        this.env.approve(DEV_TEAM, "Zebedee");
+        owner.getEnv("dev").addService("a").addService("b").addRelationship("a", "b");
+        owner.getEnv("dev").approve(ARB, "Alice").approve(ARB, "Bob").approve(ARB, "Dave");
+        owner.getEnv("dev").approve(DEV_TEAM, "Zebedee");
+    }
+
+    public ControlledEnvironment env() {
+        return owner.getEnv("dev");
     }
 }

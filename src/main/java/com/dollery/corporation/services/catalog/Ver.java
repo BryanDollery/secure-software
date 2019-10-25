@@ -2,7 +2,7 @@ package com.dollery.corporation.services.catalog;
 
 class Ver {
     Sem sem;
-    int value;
+    int value = 0;
     SittingCommittee committees;
 
     public Ver(Sem sem) {

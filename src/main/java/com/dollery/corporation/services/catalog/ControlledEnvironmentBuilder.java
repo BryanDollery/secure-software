@@ -1,6 +1,7 @@
 package com.dollery.corporation.services.catalog;
 
 import com.dollery.corporation.services.bus.EventBus;
+import com.dollery.corporation.services.org.SoftwareOrganisation;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -12,16 +13,20 @@ import static java.util.stream.Collectors.toSet;
 
 public class ControlledEnvironmentBuilder {
 
-    private EventBus bus;
     private String name;
     private String tag;
-    private StandingCommittees standingCommittees;
     private Catalog catalog;
     private Set<Service> provides = new HashSet<>();
     private Set<Service> consumes = new HashSet<>();
+    private SoftwareOrganisation owner;
+    private EventBus bus;
 
     public ControlledEnvironment build() {
-        ControlledEnvironment env = new ControlledEnvironment(bus, name, tag, standingCommittees);
+        if (owner == null || isEmpty(name) || bus == null)
+            throw new RuntimeException("An environment needs a name, and owner, and an event bus - tags are optional");
+
+        owner = new SoftwareOrganisation("test", bus);
+        ControlledEnvironment env = new ControlledEnvironment(name, tag, owner);
 
         addDependencyTree();
 
@@ -29,6 +34,10 @@ public class ControlledEnvironmentBuilder {
         consumes.parallelStream().forEach(s -> env.addService(s.getName()));
 
         return env;
+    }
+
+    private boolean isEmpty(String s) {
+        return s == null || s.trim().length() == 0;
     }
 
     /**
@@ -83,8 +92,8 @@ public class ControlledEnvironmentBuilder {
         return this;
     }
 
-    public ControlledEnvironmentBuilder on(EventBus bus) {
-        this.bus = bus;
+    public ControlledEnvironmentBuilder owner(SoftwareOrganisation owner) {
+        this.owner = owner;
         return this;
     }
 
@@ -98,8 +107,8 @@ public class ControlledEnvironmentBuilder {
         return this;
     }
 
-    public ControlledEnvironmentBuilder governedBy(StandingCommittee standingCommittee) {
-        this.standingCommittees.add(standingCommittee);
+    public ControlledEnvironmentBuilder on(EventBus bus) {
+        this.bus = bus;
         return this;
     }
 
