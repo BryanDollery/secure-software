@@ -1,5 +1,6 @@
 package com.dollery.corporation.services.org;
 
+import com.dollery.corporation.services.Colors;
 import com.dollery.corporation.services.bus.EventBus;
 import com.dollery.corporation.services.catalog.ControlledEnvironment;
 import com.dollery.corporation.services.catalog.SittingCommittee;
@@ -12,21 +13,29 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * A "software organisation" is a bounded context (ddd) that contains a single environment.
+ * A "software organisation" is a bounded context (ddd) that contains a dev, test, and prod environment. Remember that
+ * these environments are not necessarily physical -- they are actually just collections of approvals for immutable
+ * groups of related services to provide services to the organisation. If we build an environment and it works first time
+ * we could get permission to route prod traffic through it, in an emergency (this is really only true on software-
+ * defined networks).
  */
 public class SoftwareOrganisation extends PerOrg<SoftwareOrganisation> {
     private static final Logger log = LoggerFactory.getLogger(SoftwareOrganisation.class);
+
     private StandingCommittees standingCommittees = new StandingCommittees();
     private Map<String, ControlledEnvironment> envs = new HashMap<>();
     private EventBus bus;
 
     public SoftwareOrganisation(String name, EventBus bus) {
         super(name);
+
         this.bus = bus;
+
         envs.put("dev", new ControlledEnvironment("dev", this));
         envs.put("test", new ControlledEnvironment("test", this));
         envs.put("prod", new ControlledEnvironment("prod", this));
 
+        log.info("New software org: {}", Colors.BLUE.color(name));
     }
 
     @Override

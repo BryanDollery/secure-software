@@ -1,5 +1,7 @@
 package com.dollery.corporation.services;
 
+import org.json.JSONObject;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -16,7 +18,8 @@ public final class Output {
     public static final String OPEN_BRACE = SHADE.color("{");
     public static final String CLOSE_BRACE = SHADE.color("}");
     public static final String SYMBOL_SPLITTER = "(\\W+|\\w+?\\b)";
-    private static final String QUOTE = SHADE.color("\"");
+    public static final String PLAIN_QUOTE = "\"";
+    private static final String QUOTE = SHADE.color(PLAIN_QUOTE);
     private static final Pattern P = Pattern.compile(SYMBOL_SPLITTER);
 
     public static String pair(String label, String value, Colors valueColor) {
@@ -38,23 +41,33 @@ public final class Output {
     }
 
     public static String colorizeJson(String data, Colors key, Colors val) {
-        Matcher m = P.matcher(data);
-        String shaded = "";
+        JSONObject json = new JSONObject(data); // Convert text to object
+
+        Matcher m = P.matcher(json.toString(4));
+        String colored = "";
 
         Parts part = Parts.key;
 
         while (m.find()) {
             String s = m.group(0);
 
-            if (isSymbol(s)) {
-                shaded += SHADE.color(s);
+            if (s.equals("-")) {
+                part = flip(part);
+                colored += part == Parts.key ? key.color(s) : val.color(s);
+            } else if (isSymbol(s)) {
+                colored += SHADE.color(s);
+                if (s.contains("{")) part = Parts.key;
             } else {
-                shaded += part == Parts.key ? key.color(s) : val.color(s);
-                part = part == Parts.key ? Parts.val : Parts.key;
+                colored += part == Parts.key ? key.color(s) : val.color(s);
+                part = flip(part);
             }
         }
 
-        return shaded;
+        return colored;
+    }
+
+    private static Parts flip(Parts part) {
+        return part == Parts.key ? Parts.val : Parts.key;
     }
 
     public static String shadeSymbols(String data) {

@@ -1,5 +1,6 @@
 package com.dollery.corporation.services.catalog;
 
+import com.dollery.corporation.services.software.Sem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -8,9 +9,9 @@ import static com.dollery.corporation.services.Colors.DATA;
 import static com.dollery.corporation.services.Colors.GREEN;
 import static com.dollery.corporation.services.Colors.MEMBER;
 import static com.dollery.corporation.services.Colors.STATUS;
-import static com.dollery.corporation.services.catalog.Sem.patch;
 import static com.dollery.corporation.services.catalog.StandingCommittee.Status.standing;
 import static com.dollery.corporation.services.catalog.StandingCommittee.Status.unready;
+import static com.dollery.corporation.services.software.Sem.patch;
 
 /**
  * A committee is a group of at least 3 actors (people or machines) who get to decide if something is acceptable or not

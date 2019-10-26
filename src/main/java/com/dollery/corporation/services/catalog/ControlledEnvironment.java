@@ -1,6 +1,7 @@
 package com.dollery.corporation.services.catalog;
 
 import com.dollery.corporation.services.org.SoftwareOrganisation;
+import com.dollery.corporation.services.software.SemVer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

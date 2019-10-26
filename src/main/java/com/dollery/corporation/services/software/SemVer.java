@@ -1,4 +1,4 @@
-package com.dollery.corporation.services.catalog;
+package com.dollery.corporation.services.software;
 
 public class SemVer {
     private Ver major = new Ver(Sem.major);

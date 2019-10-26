@@ -1,5 +1,6 @@
-package com.dollery.corporation.services.catalog;
+package com.dollery.corporation.services.software;
 
+import com.dollery.corporation.services.catalog.ControlledEnvironment;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

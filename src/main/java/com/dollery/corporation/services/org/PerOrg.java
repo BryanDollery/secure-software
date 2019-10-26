@@ -1,5 +1,6 @@
 package com.dollery.corporation.services.org;
 
+import com.dollery.corporation.services.Output;
 import com.dollery.corporation.services.agents.Agent;
 
 import java.util.HashSet;
@@ -10,45 +11,53 @@ import java.util.UUID;
 import static java.util.stream.Collectors.joining;
 
 public abstract class PerOrg<T extends PerOrg> {
+    protected final String name;
     private final String id = UUID.randomUUID().toString();
-    private final String name;
     public Set<Agent> agents = new HashSet<>();
     public Products products;
     public Services services;
-    private PerOrg<T> parent;
-    private Set<PerOrg<T>> children = new HashSet<>();
+    private T parent;
+    private Set<T> children = new HashSet<>();
 
     PerOrg(String name) {
         this.name = name;
     }
 
-    private PerOrg(String name, PerOrg<T> parent) {
-        this(name);
-        this.parent = parent;
-    }
-
     public abstract T add(String name);
 
-    PerOrg<T> setParent(PerOrg<T> parent) {
-        this.parent = parent;
-        return this;
+    public T getParent() {
+        return parent;
     }
 
-    protected PerOrg<T> add(PerOrg<T> child) {
+    void setParent(T parent) {
+        this.parent = parent;
+    }
+
+    protected void add(T child) {
         child.setParent(this);
         children.add(child);
-        return this;
     }
 
-    public PerOrg get(String name) {
-        Optional<PerOrg<T>> first = children.parallelStream().filter(p -> p.name.equals(name)).findFirst();
+    public T get(String name) {
+        Optional<T> first = children.parallelStream().filter(p -> p.name.equals(name)).findFirst();
         if (!first.isPresent()) throw new RuntimeException("Could not find " + name);
         return first.get();
     }
 
+    public Set<T> get() {
+        return children;
+    }
+
     @Override
     public String toString() {
+        String q = Output.PLAIN_QUOTE;
+        String c = ":";
         String kids = children.parallelStream().map(PerOrg::toString).collect(joining(", "));
-        return name + (kids.length() == 0 ? "" : " -> {" + kids + "} ");
+        String s = "{" + q + name + q + ": [" + kids + "]}";
+        return s;
+
+//        String kids = children.parallelStream().map(PerOrg::toString).collect(joining(", "));
+//        return "\"" + name + "\"" + (kids.length() == 0 ? "" : " : [" + kids + "] ");
+
     }
 }

@@ -1,5 +1,6 @@
 package com.dollery.corporation.services.catalog;
 
+import com.dollery.corporation.services.software.Sem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,8 +13,8 @@ import static com.dollery.corporation.services.Colors.DATA2;
 import static com.dollery.corporation.services.Colors.MEMBER;
 import static com.dollery.corporation.services.Colors.RED;
 import static com.dollery.corporation.services.Colors.STATUS;
-import static com.dollery.corporation.services.catalog.Sem.patch;
 import static com.dollery.corporation.services.catalog.SittingCommittee.Status.approved;
+import static com.dollery.corporation.services.software.Sem.patch;
 import static java.util.stream.Collectors.joining;
 
 /**

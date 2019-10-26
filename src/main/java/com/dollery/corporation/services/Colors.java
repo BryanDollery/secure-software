@@ -75,12 +75,15 @@ public enum Colors {
 
     // Model specific
     COMMITTEE(CYAN.code),
+    NAME(CYAN.code),
     UNREADY(RED.code),
     APPROVED(GREEN.code),
     READY(GREEN.code),
     MEMBER(BLUE.code),
     DATA(BLUE.code),
+    KEY(YELLOW.code),
     DATA2(BLUE_BOLD_BRIGHT.code),
+    ID(BLACK_BRIGHT.code),
     SHADE(BLACK_BRIGHT.code),
     STATUS("");
 
